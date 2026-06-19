@@ -14,7 +14,10 @@ export class TasksService {
 
   async create(createTaskDto: CreateTaskDto) {
     return this.prisma.task.create({
-      data: createTaskDto,
+      data: {
+        title: createTaskDto.title,
+        description: createTaskDto.description?.trim() || createTaskDto.title,
+      },
     });
   }
 

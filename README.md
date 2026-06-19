@@ -68,8 +68,10 @@ cd frontend && npm run dev
 2. Import this repo
 3. Set **Root Directory** to `frontend`
 4. Add environment variable:
-   - `NEXT_PUBLIC_API_URL` = your Render API URL
+   - `API_URL` = your Render API URL (e.g. `https://task-productivity-api.onrender.com`)
 5. Deploy
+
+The frontend proxies API calls through `/api/*`, so you do **not** need `NEXT_PUBLIC_API_URL` and CORS issues are avoided.
 
 ### Finish CORS
 
