@@ -1,3 +1,4 @@
+import path from 'path';
 import type { NextConfig } from 'next';
 
 const apiUrl =
@@ -7,7 +8,7 @@ const apiUrl =
 
 const nextConfig: NextConfig = {
   turbopack: {
-    root: __dirname,
+    root: path.join(__dirname, '..'),
   },
   async rewrites() {
     return [
