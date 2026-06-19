@@ -16,22 +16,27 @@ Full-stack task management app to manage your day-to-day tasks.
 
 ## Local Development
 
-**Prerequisites:** Node.js 18+, Docker (for PostgreSQL)
+**Prerequisites:** Node.js 18+, PostgreSQL (Homebrew or Docker)
+
+> **If you see `ENOENT ... /Users/shiraptinath/package.json`:** you ran `npm` from your home folder.
+> Always `cd` into the project first:
+> `cd ~/task-tracker/task-productivity`
 
 ```bash
-# 1. Start PostgreSQL
-docker compose up -d
+# 1. Go to project folder
+cd task-productivity
 
-# 2. Backend setup
+# 2. Configure environment
 cp .env.example .env
-npm install
-npx prisma migrate deploy
-npm run prisma:seed   # optional sample data
+cp frontend/.env.example frontend/.env.local
 
-# 3. Frontend setup
-cd frontend
-cp .env.example .env.local
+# macOS Homebrew PostgreSQL uses your username (see .env.example).
+# For Docker: docker compose up -d and use postgres:postgres in DATABASE_URL
+
+# 3. Install + migrate
 npm install
+cd frontend && npm install && cd ..
+npx prisma migrate deploy
 
 # 4. Run both (two terminals)
 # Terminal 1 — backend (from repo root)
