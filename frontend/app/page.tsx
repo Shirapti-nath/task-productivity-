@@ -48,6 +48,7 @@ function getErrorMessage(error: unknown) {
 
 export default function Home() {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -82,22 +83,32 @@ export default function Home() {
 
   async function createTask() {
     const trimmedTitle = title.trim();
+    const trimmedDescription = description.trim();
 
     if (!trimmedTitle) {
-      showToast('error', 'Task title is required');
+      showToast('error', 'Task headline is required');
       return;
     }
 
     if (trimmedTitle.length > 100) {
-      showToast('error', 'Title must be less than 100 characters');
+      showToast('error', 'Headline must be less than 100 characters');
+      return;
+    }
+
+    if (!trimmedDescription) {
+      showToast('error', 'Task description is required');
       return;
     }
 
     setSubmitting(true);
 
     try {
-      await api.post('/tasks', { title: trimmedTitle });
+      await api.post('/tasks', {
+        title: trimmedTitle,
+        description: trimmedDescription,
+      });
       setTitle('');
+      setDescription('');
       showToast('success', 'Task created successfully');
       await fetchTasks();
     } catch (error) {
@@ -173,13 +184,27 @@ export default function Home() {
             void createTask();
           }}
         >
-          <input
-            placeholder="Enter a new task..."
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
+          <label className="field">
+            <span>Task Headline</span>
+            <input
+              placeholder="Enter task headline"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
+          </label>
+
+          <label className="field">
+            <span>Task Description</span>
+            <textarea
+              placeholder="Enter task description"
+              rows={4}
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+            />
+          </label>
+
           <button type="submit" disabled={submitting}>
-            {submitting ? 'Creating...' : 'Add Task'}
+            {submitting ? 'Creating...' : 'Create Task'}
           </button>
         </form>
       </section>
@@ -194,7 +219,7 @@ export default function Home() {
         {tasks.map((task) => (
           <article key={task.id} className="task-card">
             <h3>{task.title}</h3>
-            {task.description !== task.title && <p>{task.description}</p>}
+            <p>{task.description}</p>
             <div className="task-meta">
               <span
                 className={`status-badge ${
