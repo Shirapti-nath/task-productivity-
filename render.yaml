@@ -3,6 +3,7 @@ services:
     name: task-productivity-api
     runtime: node
     plan: free
+    region: oregon
     buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npx prisma migrate deploy && npm run start:prod
     healthCheckPath: /tasks
@@ -12,12 +13,13 @@ services:
           name: task-productivity-db
           property: connectionString
       - key: FRONTEND_URL
-        sync: false
+        value: https://frontend-six-alpha-81.vercel.app
       - key: NODE_ENV
         value: production
 
 databases:
   - name: task-productivity-db
     plan: free
+    region: oregon
     databaseName: taskproductivity
     user: taskproductivity
